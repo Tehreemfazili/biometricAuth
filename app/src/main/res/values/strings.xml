@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">BiometricAuth</string>
+    <string name="cancel">Cancel</string>
+    <string name="fingerprint_not_recognized">Fingerprint not recognized</string>
+    <string name="status_hint">Touch the fingerprint sensor</string>
+    <string name="fingerprint_dialog_title">Activate Fingerprint Authentication</string>
+    <string name="fingerprint_dialog_title2">Fingerprint Authentication</string>
+    <string name="fingerprint_dialog_description">To make it easier, you can login with the Fingerprint that is already stored in this mobile</string>
 </resources>
