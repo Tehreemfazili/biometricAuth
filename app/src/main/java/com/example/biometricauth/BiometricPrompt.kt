@@ -30,8 +30,8 @@ internal class BiometricPrompt(
 
     private var keyStore: KeyStore? = getKeystore()
     private var cipher: Cipher? = null
-    private var cryptoObject: FingerprintManagerCompat.CryptoObject? = null
-   // private var dialog: BiometricDialog? = null
+    private var cryptoObject: FingerprintManagerCompat.CryptoObject ? = null
+    var dialog: BiometricDialog? = null
 
     private fun getKeystore() = try {
         KeyStore.getInstance(KEY_STORE_PROVIDER)?.apply { load(null) }
@@ -70,26 +70,26 @@ internal class BiometricPrompt(
                 val fingerprintManager = context.getSystemService(FingerprintManager::class.java)
                 fingerprintManager.authenticate(cryptoObject, android.os.CancellationSignal(), 0,  object : FingerprintManager.AuthenticationCallback() {
                     override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
-                        super.onAuthenticationError(errMsgId, errString)
-                      //  dialog?.setStatus(errString?.toString(), R.color.colorError)
+                        authListener.onAuthError(errMsgId, errString ?: "")
+                          dialog?.setStatus(errString?.toString(), R.color.colorError)
                         authListener.onAuthError(errMsgId, errString ?: "")
                     }
 
                     override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult?) {
                         super.onAuthenticationSucceeded(result)
-//                        dialog?.dismiss()
-                        authListener.onAuthSuccess()
+                                dialog?.dismiss()
+                                authListener.onAuthSuccess()
                     }
 
                     override fun onAuthenticationHelp(helpMsgId: Int, helpString: CharSequence?) {
                         super.onAuthenticationHelp(helpMsgId, helpString)
-//                        dialog?.setStatus(helpString?.toString())
+                                dialog?.setStatus(helpString?.toString())
                         authListener.onAuthHelp(helpMsgId, helpString ?: "")
                     }
 
                     override fun onAuthenticationFailed()  {
                         super.onAuthenticationFailed()
-//                        dialog?.setStatus(context.getString(R.string.fingerprint_not_recognized), R.color.colorError)
+                        dialog?.setStatus(context.getString(R.string.fingerprint_not_recognized), R.color.colorError)
                         authListener.onAuthFailure()
                     }
                 }, null)
@@ -100,25 +100,25 @@ internal class BiometricPrompt(
                     object : FingerprintManagerCompat.AuthenticationCallback() {
                         override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
                             super.onAuthenticationError(errMsgId, errString)
-                            //dialog?.setStatus(errString?.toString(), R.color.colorError)
+                            /dialog?.setStatus(errString?.toString(), R.color.colorError)
                             authListener.onAuthError(errMsgId, errString ?: "")
                         }
 
                         override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult?) {
                             super.onAuthenticationSucceeded(result)
-//                            dialog?.dismiss()
+                            dialog?.dismiss()
                             authListener.onAuthSuccess()
                         }
 
                         override fun onAuthenticationHelp(helpMsgId: Int, helpString: CharSequence?) {
                             super.onAuthenticationHelp(helpMsgId, helpString)
-//                            dialog?.setStatus(helpString?.toString())
+                            dialog?.setStatus(helpString?.toString())
                             authListener.onAuthHelp(helpMsgId, helpString ?: "")
                         }
 
                         override fun onAuthenticationFailed() {
                             super.onAuthenticationFailed()
-//                            dialog?.setStatus(context.getString(R.string.fingerprint_not_recognized), R.color.colorError)
+                            dialog?.setStatus(context.getString(R.string.fingerprint_not_recognized), R.color.colorError)
                             authListener.onAuthFailure()
                         }
                     }, null)
@@ -132,12 +132,12 @@ internal class BiometricPrompt(
         val subtitle = requireNotNull(builder.subtitle) { "subTitle cannot be null" }
         val description = requireNotNull(builder.description) { "description cannot be null" }
 
-//        dialog = BiometricDialog.Builder(context)
-//            .setTitle(title)
-//            .setSubTitle(subtitle)
-//            .setButtonNegative(builder.btnNegativeText)
-//            .setDescription(description)
-//            .build().apply { show() }
+        dialog = BiometricDialog.Builder(context)
+            .setTitle(title)
+            .setSubTitle(subtitle)
+            .setButtonNegative(builder.btnNegativeText)
+            .setDescription(description)
+            .build().apply { show() }
     }
 
 
